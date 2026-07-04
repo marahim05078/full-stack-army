@@ -152,7 +152,7 @@ function log(msg) {
 
 নিচে আরও কয়েক ধরনের সাইড ইফেক্টের উদাহরণ দেয় হলো:
 
-### Randomness side effect
+##### Randomness side effect
 
 ```js
 function getRandom() {
@@ -163,9 +163,9 @@ console.log(getRandom()); // 0.123...
 console.log(getRandom()); // 0.987...
 ```
 
-Side effect: output changes even with same input.
+Side effect: একই ইনপুটে ভিন্ন আউটপুট।
 
-### Time/Date
+##### Time/Date side effect
 
 ```js
 function getCurrentTime() {
@@ -175,9 +175,9 @@ function getCurrentTime() {
 console.log(getCurrentTime()); // depends on current time
 ```
 
-Side effect: depends on external system clock.
+Side effect: সিস্টেম ক্লকের উপর নির্ভর করছে।
 
-### Exceptions / Errors
+##### Exceptions / Errors side effect
 
 ```js
 function divide(a, b) {
@@ -188,9 +188,9 @@ function divide(a, b) {
 divide(10, 0); // throws error → side effect
 ```
 
-Side effect: interrupts normal execution. Throwing errors changes program flow.
+Side effect: Error throw-এর কারণে প্রোগ্রাম ফ্লো ভেঙে যাচ্ছে।
 
-### File System / Network
+##### File System / Network side effect
 
 ```js
 const fs = require("fs");
@@ -201,7 +201,7 @@ function saveData(data) {
 }
 ```
 
-Side effect: changes external file system.
+Side effect: বাইরের ফাইল সিস্টেম পরিবর্তিত হচ্ছে।
 
 ```js
 async function fetchData() {
@@ -210,7 +210,7 @@ async function fetchData() {
 }
 ```
 
-Side effect: depends on external network.
+Side effect: বাইরের নেটওয়ার্কের উপর নির্ভর করছে।
 
 ## Higher order function
 
