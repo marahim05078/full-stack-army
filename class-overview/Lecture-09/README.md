@@ -86,10 +86,27 @@ changeLimit(limit);
 console.log(limit); // 500
 ```
 
-এবার কিন্তু ফাংশনটা ভ্যারিয়েবলের ভ্যালু চেইঞ্জ করে ফেলেছে। তার মানে এটার সাইড ইফেক্ট আছে। তাই এটা একটা ইমপিওর ফাংশন। আরেকটা উদাহরণ দেখি।
+এবার কিন্তু ফাংশনটা ভ্যারিয়েবলের ভ্যালু চেইঞ্জ করে ফেলেছে। তার মানে এটার সাইড ইফেক্ট আছে। তাই এটা একটা ইমপিওর ফাংশন।
+এই সাইড ইফেক্টকে বলা হয় Changing External Variables (State Mutation) side effect।
+
 এখন প্রশ্ন হলো কেনো আগের ফাংশন limit এর ভ্যালু পরিবর্তন করল না আর কেন পরের ফাংশনটা limit-এর ভ্যালু পরিবর্তন করে ফেলল?
 কারণ আগের ফাংশনটাতে limit-এর ভ্যালুকে আর্গুমেন্ট হিসেবে পাস করা হয়েছে আর ফাংশনটা যেহেতু parameter হিসেবে ভ্যালুটা পাচ্ছে তাই গ্লোবাল স্কোপের limitএর ভ্যালু পরিবর্তন হচ্ছে না। কারণ গ্লোবাল স্কোপের limit আর parameter-এর limit এক নয়। কেনো এক নয়? কারণ limit হলো প্রিমিটিভ ডাটা আর প্রিমিতিভের ক্ষেত্রে pass-by-value হয়। pass-by-reference হলে গ্লোবাল স্কোপের limit-এর ভ্যালু পরিবর্তন হয়ে যেতো যাকে আমরা সাইড ইফেক্ট বলছি। pass-by-reference হয় referece ডাটা টাইপের এমনটা হয়। যেমন array, object ইত্যাদি।  
-দ্বিতীয় ফাংশনের ক্ষেত্রে কোন parameter বা আর্গুমেন্ট হিসেবে কোন ভ্যালু পাস করা হয় নাই তাই ফাংশনটা ভিতরের limit-কে গ্লোবাল limit হিসেবে পেয়ে গেছে এবং অরিজিনাল limit-এর ভ্যালু reassign মনে overright হয়ে গেছে। নিচে array ডাটা টাইপ-এর ক্ষেত্রে এরকমটাই হয়েছে।
+দ্বিতীয় ফাংশনের ক্ষেত্রে কোন parameter বা আর্গুমেন্ট হিসেবে কোন ভ্যালু পাস করা হয় নাই তাই ফাংশনটা ভিতরের limit-কে গ্লোবাল limit হিসেবে পেয়ে গেছে এবং অরিজিনাল limit-এর ভ্যালু reassign মনে overright হয়ে গেছে।
+এই সাইড ইফেক্টের আরেকটা এক্সামপল নিচে দেয় হলো:
+
+```js
+let count = 0;
+
+function increment() {
+  count++; // changes external variable
+  return count;
+}
+
+increment(); // count becomes 1
+increment(); // count becomes 2
+```
+
+চলেন আরেকটা উদাহরণ দেখি।
 
 ```js
 const arr = [1, 2, 3];
@@ -120,6 +137,8 @@ function add(arr, data) {
 add(arr, 4); // [1, 2, 3, 4] (side effect)
 ```
 
+এই ধরনের সাইড ইফেক্টকে বলা হয় Mutating Data Structures (Arrays/Objects) side effect।
+
 এবার আপনাদের কাছে প্রশ্ন নিচের ফাংশনটা কি পিওর নাকি ইমপিওর?
 
 ```js
@@ -129,6 +148,69 @@ function log(msg) {
 ```
 
 এটা দেখতে আপাতদৃষ্টিতে পিওর ফাংশন মনে হলেও এটা একটা ইমপিওর ফাংশন। কারণ এটা কনসোলে লগ হচ্ছে। তাই যে ফাংশনে console.log() দেয়া থাকবে সেটা ইমপিওর হওয়ার পসিবিলিটি বেশি।
+এই সাইড ইফেক্টকে বলা হয় Input/Output (I/O) side effect.
+
+নিচে আরও কয়েক ধরনের সাইড ইফেক্টের উদাহরণ দেয় হলো:
+
+### Randomness side effect
+
+```js
+function getRandom() {
+  return Math.random(); // different result each time
+}
+
+console.log(getRandom()); // 0.123...
+console.log(getRandom()); // 0.987...
+```
+
+Side effect: output changes even with same input.
+
+### Time/Date
+
+```js
+function getCurrentTime() {
+  return new Date().toLocaleTimeString();
+}
+
+console.log(getCurrentTime()); // depends on current time
+```
+
+Side effect: depends on external system clock.
+
+### Exceptions / Errors
+
+```js
+function divide(a, b) {
+  if (b === 0) throw new Error("Cannot divide by zero");
+  return a / b;
+}
+
+divide(10, 0); // throws error → side effect
+```
+
+Side effect: interrupts normal execution. Throwing errors changes program flow.
+
+### File System / Network
+
+```js
+const fs = require("fs");
+
+function saveData(data) {
+  fs.writeFileSync("data.txt", data); // writes to file
+  return "Saved!";
+}
+```
+
+Side effect: changes external file system.
+
+```js
+async function fetchData() {
+  let response = await fetch("https://api.example.com/data");
+  return response.json();
+}
+```
+
+Side effect: depends on external network.
 
 ## Higher order function
 
