@@ -56,7 +56,7 @@ const myFatArrowFn = () => {};
 
 ```js
 function sum(a, b) {
-	return a + b;
+  return a + b;
 }
 
 sum(10, 20); // 30
@@ -67,7 +67,7 @@ sum(10, 20); // 30
 ```js
 let limit = 100;
 function changeLimit(limit) {
-	limit = 500;
+  limit = 500;
 }
 
 changeLimit(limit);
@@ -79,7 +79,7 @@ console.log(limit); // 100
 ```js
 let limit = 100;
 function changeLimit() {
-	limit = 500;
+  limit = 500;
 }
 
 changeLimit(limit);
@@ -87,12 +87,15 @@ console.log(limit); // 500
 ```
 
 এবার কিন্তু ফাংশনটা ভ্যারিয়েবলের ভ্যালু চেইঞ্জ করে ফেলেছে। তার মানে এটার সাইড ইফেক্ট আছে। তাই এটা একটা ইমপিওর ফাংশন। আরেকটা উদাহরণ দেখি।
+এখন প্রশ্ন হলো কেনো আগের ফাংশন limit এর ভ্যালু পরিবর্তন করল না আর কেন পরের ফাংশনটা limit-এর ভ্যালু পরিবর্তন করে ফেলল?
+কারণ আগের ফাংশনটাতে limit-এর ভ্যালুকে আর্গুমেন্ট হিসেবে পাস করা হয়েছে আর ফাংশনটা যেহেতু parameter হিসেবে ভ্যালুটা পাচ্ছে তাই গ্লোবাল স্কোপের limitএর ভ্যালু পরিবর্তন হচ্ছে না। কারণ গ্লোবাল স্কোপের limit আর parameter-এর limit এক নয়। কেনো এক নয়? কারণ limit হলো প্রিমিটিভ ডাটা আর প্রিমিতিভের ক্ষেত্রে pass-by-value হয়। pass-by-reference হলে গ্লোবাল স্কোপের limit-এর ভ্যালু পরিবর্তন হয়ে যেতো যাকে আমরা সাইড ইফেক্ট বলছি। pass-by-reference হয় referece ডাটা টাইপের এমনটা হয়। যেমন array, obeject ইত্যাদি।  
+দ্বিতীয় ফাংশনের ক্ষেত্রে কোন parameter বা আর্গুমেন্ট হিসেবে কোন ভ্যালু পাস করা হয় নাই তাই ফাংশনটা ভিতরের limit-কে গ্লোবাল limit হিসেবে পেয়ে গেছে এবং অরিজিনাল limit-এর ভ্যালু reassign মনে overright হয়ে গেছে। নিচে array ডাটা টাইপ-এর ক্ষেত্রে এরকমটাই হয়েছে।
 
 ```js
 const arr = [1, 2, 3];
 function add(arr, data) {
-	arr = [...arr, data];
-	return arr;
+  arr = [...arr, data];
+  return arr;
 }
 ```
 
@@ -101,17 +104,27 @@ function add(arr, data) {
 ```js
 const arr = [1, 2, 3];
 function add(data) {
-	arr.push(data);
+  arr.push(data);
 }
+add(4); // [1, 2, 3, 4] (side effect)
 ```
 
 এটা পুরোপুরি একটা ইমপিওর ফাংশন। কারণ তা সরাসরি arr ভ্যারিয়েবলের ডাটা আপডেট করছে। তার মানে সাইড ইফেক্ট হচ্ছে।
+এমনকি array-কে যদি আমরা আর্গুমেন্ট হিসেবেও পাস করি তারপরেও অরিজিনাল array-এর ভ্যালু পরিবর্তন হয়ে যাবে মনে সাইড ইফেক্ট হবে। কারণ pass-by-reference-এর ম্যাজিক। সুতরাং নিচের ফাংশনটাও একটা ইমপিয়র ফাংশন।
+
+```js
+const arr = [1, 2, 3];
+function add(arr, data) {
+  arr.push(arr, data);
+}
+add(arr, 4); // [1, 2, 3, 4] (side effect)
+```
 
 এবার আপনাদের কাছে প্রশ্ন নিচের ফাংশনটা কি পিওর নাকি ইমপিওর?
 
 ```js
 function log(msg) {
-	console.log(msg);
+  console.log(msg);
 }
 ```
 
@@ -132,8 +145,8 @@ Higher order function এই টার্ম যেখানে আসবে স
 
 ```js
 function sum(a, b) {
-	const r = a + b;
-	return r;
+  const r = a + b;
+  return r;
 }
 ```
 
@@ -141,21 +154,21 @@ function sum(a, b) {
 
 ```js
 function randomSum(max) {
-	const random1 = Math.floor(Math.random() * max);
-	const random2 = Math.floor(Math.random() * max);
-	return random1 + random2;
+  const random1 = Math.floor(Math.random() * max);
+  const random2 = Math.floor(Math.random() * max);
+  return random1 + random2;
 }
 
 function randomSub(max) {
-	const random1 = Math.floor(Math.random() * max);
-	const random2 = Math.floor(Math.random() * max);
-	return random1 - random2;
+  const random1 = Math.floor(Math.random() * max);
+  const random2 = Math.floor(Math.random() * max);
+  return random1 - random2;
 }
 
 function randomSqrSum(max) {
-	const random1 = Math.floor(Math.random() * max);
-	const random2 = Math.floor(Math.random() * max);
-	return random1 * random1 + random2 * random2;
+  const random1 = Math.floor(Math.random() * max);
+  const random2 = Math.floor(Math.random() * max);
+  return random1 * random1 + random2 * random2;
 }
 ```
 
@@ -163,13 +176,13 @@ function randomSqrSum(max) {
 
 ```js
 function generateTwoNumbers(max) {
-	const random1 = Math.floor(Math.random() * max);
-	const random2 = Math.floor(Math.random() * max);
+  const random1 = Math.floor(Math.random() * max);
+  const random2 = Math.floor(Math.random() * max);
 
-	return {
-		random1,
-		random2,
-	};
+  return {
+    random1,
+    random2,
+  };
 }
 ```
 
@@ -177,18 +190,18 @@ function generateTwoNumbers(max) {
 
 ```js
 function randomSum(max) {
-	const { random1, random2 } = generateTwoNumbers(max);
-	return random1 + random2;
+  const { random1, random2 } = generateTwoNumbers(max);
+  return random1 + random2;
 }
 
 function randomSub(max) {
-	const { random1, random2 } = generateTwoNumbers(max);
-	return random1 - random2;
+  const { random1, random2 } = generateTwoNumbers(max);
+  return random1 - random2;
 }
 
 function randomSqrSum(max) {
-	const { random1, random2 } = generateTwoNumbers(max);
-	return random1 * random1 + random2 * random2;
+  const { random1, random2 } = generateTwoNumbers(max);
+  return random1 * random1 + random2 * random2;
 }
 ```
 
@@ -196,10 +209,10 @@ function randomSqrSum(max) {
 
 ```js
 function generateTwoRandNumber(max, cb) {
-	const random1 = Math.floor(Math.random() * max);
-	const random2 = Math.floor(Math.random() * max);
-	const result = cb(random1, random2);
-	return result;
+  const random1 = Math.floor(Math.random() * max);
+  const random2 = Math.floor(Math.random() * max);
+  const result = cb(random1, random2);
+  return result;
 }
 ```
 
@@ -228,7 +241,7 @@ generateTwoRandNumber(10, (rand1, rand2) => rand1 * rand1 + rand2 * rand2);
 
 ```js
 function sqr(a) {
-	return a * a;
+  return a * a;
 }
 ```
 
@@ -236,7 +249,7 @@ function sqr(a) {
 
 ```js
 function cube(a) {
-	return a * a * a;
+  return a * a * a;
 }
 ```
 
@@ -244,13 +257,13 @@ function cube(a) {
 
 ```js
 function power(p) {
-	return function (n) {
-		let result = 1;
-		for (let i = 1; i <= p; i++) {
-			result *= n;
-		}
-		return result;
-	};
+  return function (n) {
+    let result = 1;
+    for (let i = 1; i <= p; i++) {
+      result *= n;
+    }
+    return result;
+  };
 }
 ```
 
@@ -261,17 +274,17 @@ const sqr = power(2);
 const cube = power(3);
 const power8 = power(8);
 
-console.log('SQR', sqr); // SQR [Function (anonymous)]
-console.log('cube', cube); // cube [Function (anonymous)]
-console.log('power8', power8); // power8 [Function (anonymous)]
+console.log("SQR", sqr); // SQR [Function (anonymous)]
+console.log("cube", cube); // cube [Function (anonymous)]
+console.log("power8", power8); // power8 [Function (anonymous)]
 ```
 
 এখানে দেখা যাচ্ছে একটা ফাংশন রিটার্ন করছে যার আর্গুমেন্ট হিসেবে নাম্বার দিতে হবে। তাহলে আমরা নিচের কাজটা করতে পারি। যে ভ্যারিয়েবলগুলো নিয়েছি তাদের আর্গুমেন্ট হিসেবে নাম্বার দিয়ে দিলেই আমরা স্কয়ার, কিউব এবং ৮ম পাওয়ার পেয়ে যাবো।
 
 ```js
-console.log('SQR', sqr(2)); // SQR 4
-console.log('cube', cube(2)); // cube 8
-console.log('power8', power8(2)); // power8 256
+console.log("SQR", sqr(2)); // SQR 4
+console.log("cube", cube(2)); // cube 8
+console.log("power8", power8(2)); // power8 256
 ```
 
 মূলত ডায়নামিক্যালি কোনো ফাংশন জেনারেট করার জন্য এবং পুরো সিস্টেমের একটা abstract layer প্রোভাইড করার জন্য আমরা একটা ফাংশন থেকে আরেকটা ফাংশন রিটার্ন করে থাকি। অর্থাৎ হাইয়ার অর্ডার ফাংশন ব্যবহার করে থাকি।
@@ -291,14 +304,14 @@ console.log('power8', power8(2)); // power8 256
 
 ```js
 const f = function (n) {
-	let result = 1;
-	for (let i = 1; i <= p; i++) {
-		result *= n;
-	}
-	return result;
+  let result = 1;
+  for (let i = 1; i <= p; i++) {
+    result *= n;
+  }
+  return result;
 };
 function power(p) {
-	return f;
+  return f;
 }
 ```
 
@@ -306,14 +319,14 @@ function power(p) {
 
 ```js
 function power(p) {
-	const f = function (n) {
-		let result = 1;
-		for (let i = 1; i <= p; i++) {
-			result *= n;
-		}
-		return result;
-	};
-	return f;
+  const f = function (n) {
+    let result = 1;
+    for (let i = 1; i <= p; i++) {
+      result *= n;
+    }
+    return result;
+  };
+  return f;
 }
 ```
 
@@ -329,9 +342,9 @@ function power(p) {
 ```js
 const a = 10;
 function mostOuter() {
-	function outer() {
-		console.log(a);
-	}
+  function outer() {
+    console.log(a);
+  }
 }
 ```
 
@@ -339,10 +352,10 @@ function mostOuter() {
 
 ```js
 function mostOuter() {
-	function outer() {
-		const a = 10;
-		console.log(a);
-	}
+  function outer() {
+    const a = 10;
+    console.log(a);
+  }
 }
 ```
 
@@ -352,7 +365,7 @@ function mostOuter() {
 
 ```js
 {
-	const notScoped = 'not scoped';
+  const notScoped = "not scoped";
 }
 console.log(notScoped); // Error
 ```
@@ -361,14 +374,14 @@ console.log(notScoped); // Error
 
 ```js
 {
-	const notScoped = 'scoped';
-	{
-		{
-			{
-				console.log(notScoped); // scoped
-			}
-		}
-	}
+  const notScoped = "scoped";
+  {
+    {
+      {
+        console.log(notScoped); // scoped
+      }
+    }
+  }
 }
 ```
 
@@ -386,20 +399,20 @@ Closure হলো একটি মেমোরি যা আমরা একট�
 
 ```js
 function A(a) {
-	console.log('I am A');
+  console.log("I am A");
 }
 
 function B() {
-	A();
+  A();
 }
 
 function C() {
-	B();
-	B();
+  B();
+  B();
 }
 function D() {
-	C();
-	A();
+  C();
+  A();
 }
 
 D();
@@ -418,15 +431,15 @@ I am A
 
 ```js
 function randomSum(max) {
-	const random1 = Math.floor(Math.random() * max);
-	const random2 = Math.floor(Math.random() * max);
-	t();
-	function t() {
-		console.log(test);
-	}
-	var test = 'something';
-	t();
-	return random1 + random2;
+  const random1 = Math.floor(Math.random() * max);
+  const random2 = Math.floor(Math.random() * max);
+  t();
+  function t() {
+    console.log(test);
+  }
+  var test = "something";
+  t();
+  return random1 + random2;
 }
 
 const r = randomSum(15);
@@ -436,7 +449,7 @@ const r = randomSum(15);
 
 ```js
 var t = function () {
-	console.log(test);
+  console.log(test);
 };
 ```
 
@@ -452,11 +465,11 @@ var t = function () {
 
 ```js
 (function (name) {
-	console.log(name);
-})('Nayem');
+  console.log(name);
+})("Nayem");
 
 (() => {
-	console.log('Test');
+  console.log("Test");
 })();
 ```
 
