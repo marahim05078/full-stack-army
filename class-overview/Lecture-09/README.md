@@ -152,7 +152,7 @@ function log(msg) {
 
 নিচে আরও কয়েক ধরনের সাইড ইফেক্টের উদাহরণ দেয় হলো:
 
-##### Randomness side effect
+#### Randomness side effect
 
 ```js
 function getRandom() {
@@ -165,7 +165,7 @@ console.log(getRandom()); // 0.987...
 
 Side effect: একই ইনপুটে ভিন্ন আউটপুট।
 
-##### Time/Date side effect
+#### Time/Date side effect
 
 ```js
 function getCurrentTime() {
@@ -177,7 +177,7 @@ console.log(getCurrentTime()); // depends on current time
 
 Side effect: সিস্টেম ক্লকের উপর নির্ভর করছে।
 
-##### Exceptions / Errors side effect
+#### Exceptions / Errors side effect
 
 ```js
 function divide(a, b) {
@@ -190,7 +190,7 @@ divide(10, 0); // throws error → side effect
 
 Side effect: Error throw-এর কারণে প্রোগ্রাম ফ্লো ভেঙে যাচ্ছে।
 
-##### File System / Network side effect
+#### File System / Network side effect
 
 ```js
 const fs = require("fs");
