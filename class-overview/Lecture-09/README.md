@@ -445,7 +445,7 @@ Lexing এর পর tokens হবে নিচের মত:
 - total → identifier
 - = → operator
 - 10 → numeric literal
-- - → operator
+- '+' → operator
 - 20 → numeric literal
 - ; → punctuation
 
@@ -512,7 +512,7 @@ Tokens → ["let","x","=","5","+","10",";"]
   - Heap Memory → অবজেক্ট ও ডেটা সংরক্ষণ করে।
   - Event Loop → asynchronous কাজগুলো হ্যান্ডেল করে।
 
-  <img src="../../assets/js_compilation_pipeline.png" alt="Javascript Compilation Pipeline">
+  <img width="60%" src="../../assets/js_compilation_pipeline.png" alt="Javascript Compilation Pipeline">
 
 মূল কথা: JavaScript কোড সরাসরি রান হয় না। প্রথমে Lexing → Parsing → Compilation → Execution এই চার ধাপের মধ্য দিয়ে যায়।
 
