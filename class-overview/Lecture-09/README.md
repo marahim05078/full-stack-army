@@ -382,6 +382,12 @@ console.log("power8", power8(2)); // power8 256
 
 ### Scope
 
+Scope মানে হলো কোথায় কোন ভ্যারিয়েবল অ্যাক্সেস করা যাবে তার নিয়ম। Javascript-এ মূলত তিন ধরনের scope আছে।
+
+- Global Scope --> পুরো প্রোগ্রামে অ্যাক্সেস করা যায়।
+- Function Scope --> শুধু ফাংশনের ভিতরে অ্যাক্সেস করা যাবে।
+- Block Scope --> {..} ব্লকের ভিতরে অ্যাক্সেস করা যাবে যখন let ও const দিয়ে ডিফাইন করা হবে।
+
 আমরা যদি উপরের power ফাংশনের ভিতরের ফাংশনকে বাইরে বের করে এনে দেখি তাহলে কেমন দেখা যায় দেখি।
 
 ```js
@@ -397,7 +403,7 @@ function power(p) {
 }
 ```
 
-এখানে একটা error throw করবে, `Reference error: p is not defined`। কারণ জাভাস্ক্রিপ্ট লেক্সিক্যাল স্কোপিং সাপোর্ট করে। মানে কোন ভ্যারিয়েবল কোথায় accessible, এটাকেই মূলত স্কোপ বলা হয়। এখন কোন ভ্যারিয়েবল বা কোন ফাংশন কোথায় এক্সেসিবল তা সেট করা হয় যখন lexing হয়। এখন lexing আবার কি? আমরা যে কোডগুলো লিখি কম্পিউটার তার কিছুই বুঝে না। কম্পিউটার বুঝে মেশিন কোড মানে বাইনারি। আমাদের লিখিত কোডকে ভেঙেচুরে মেশিন কোডে রূপান্তর করে কম্পিউটারের কাছে দিলেই কম্পিউটার তা বুঝতে পারবে। এই যে মেশিন কোডে রূপান্তরের প্রসেস, তার প্রথম ধাপই হলো parsing and lexing। অর্থাৎ আমরা যে ফাইলটা দিচ্ছি, সেটা জাভাস্ক্রিপ্ট ইঞ্জিন, অন্যান্য ল্যাঙ্গুয়েজের ক্ষেত্রে কম্পাইলার, lexing বা parsing করবে, এর মধ্যে কি কি আছে তা পড়ে ফেলবে। পড়ে সেই কোডগুলোকে টুকরো টুকরো করে ফেলবে। টুকরো টুকরো করে একটা Abstract Binary Tree (ABS) বানাবে। এই Tree বানানোর প্রসেসটাকেই বলা হচ্ছে lexing করা। আর এই lexing করার কাজটা হয় কম্পাইল করারও আগে। যেহেতু কম্পাইল করার আগে lexing হচ্ছে, তাই কাটাছেঁড়ার সময় যখন সে f ফাংশনে p পাচ্ছে না তখন সে error throw করবে। পাবে কিভাবে, সেতো কোড রান করছে না। জাস্ট পড়ছে। পড়ার সময় যদি এরর পায় সে সেটা আমাদের দিয়ে দিচ্ছে। এজন্য lexical scoping এর কিছু প্রব্লেম আছে। যদি কম্পাইল টাইমে scope সেট হতো তাহলে কম্পাইল করার সময় অনেক কিছু বুঝতে পারতো। যদি রানটাইমে scope সেট হতো তাহলে রান করার সময় আমরা ডায়নামিক্যালিভাবে scoping তৈরি করতে পারতাম। কিন্তু জাভাস্ক্রিপ্ট যেহেতু lexical scoping সাপোর্ট করে তাই এই কাজটা আমরা জাভাস্ক্রিপ্টে পারবো না। যদি f ফাংশনকে আমরা power এর মধ্যে রাখি তাহলে সে p যদি f এর কাছে না পায় তাহলে বাইরে দিয়ে দেখলে দেখবে প্যারেন্ট ফাংশনের কাছে p আছে। তাহলে আর কোনো সমস্যা নাই।
+এখানে একটা error throw করবে, `Reference error: p is not defined`। কারণ জাভাস্ক্রিপ্ট লেক্সিক্যাল স্কোপিং সাপোর্ট করে। মানে কোন ভ্যারিয়েবল কোথায় accessible, এটাকেই মূলত স্কোপ বলা হয়। এখন কোন ভ্যারিয়েবল বা কোন ফাংশন কোথায় এক্সেসিবল তা সেট করা হয় যখন lexing হয়। যেহেতু কম্পাইল করার আগে lexing হচ্ছে, তাই কাটাছেঁড়ার সময় যখন সে f ফাংশনে p পাচ্ছে না তখন সে error throw করবে। পাবে কিভাবে, সেতো কোড রান করছে না। জাস্ট পড়ছে। পড়ার সময় যদি এরর পায় সে সেটা আমাদের দিয়ে দিচ্ছে। এজন্য lexical scoping এর কিছু প্রব্লেম আছে। যদি কম্পাইল টাইমে scope সেট হতো তাহলে কম্পাইল করার সময় অনেক কিছু বুঝতে পারতো। যদি রানটাইমে scope সেট হতো তাহলে রান করার সময় আমরা ডায়নামিক্যালিভাবে scoping তৈরি করতে পারতাম। কিন্তু জাভাস্ক্রিপ্ট যেহেতু lexical scoping সাপোর্ট করে তাই এই কাজটা আমরা জাভাস্ক্রিপ্টে পারবো না। যদি f ফাংশনকে আমরা power এর মধ্যে রাখি তাহলে সে p যদি f এর কাছে না পায় তাহলে বাইরে দিয়ে দেখলে দেখবে প্যারেন্ট ফাংশনের কাছে p আছে। তাহলে আর কোনো সমস্যা নাই।
 
 ```js
 function power(p) {
@@ -413,6 +419,102 @@ function power(p) {
 ```
 
 যদি আমরা `console.log(sqr.toString())` করি, সে একটা ফাংশন রিটার্ন করবে। এখন এই ফাংশনকে কপি করে যদি অন্য নামে আমরা স্টোর করে কল করি সে আমাদের error throw করবে। কিন্তু কেন? এই জিনিসটা লিখে বুঝানো একটু কঠিন। এটা বুঝার জন্য আপনারা ভিডিওর [1:18:21](https://youtu.be/wMy2IZ12mxM?t=4701) থেকে [1:34:06](https://youtu.be/wMy2IZ12mxM?t=5646) পর্যন্ত দেখুন। তাহলে ভাল করে বুঝবেন।
+
+এখন lexing আবার কি?
+Lexing বা Lexical Analysis হলো JavaScript কোড রান করার প্রথম ধাপ। এখানে কোডকে ছোট ছোট অংশে ভেঙে tokens বানানো হয়, যাতে parser সহজে বুঝতে পারে কোডের গঠন।
+অর্থাৎ:-
+
+- কোডকে character by character পড়ে।
+- প্রতিটি অর্থপূর্ণ অংশকে token বানায়।
+- Token হতে পারে:
+  - Keyword → যেমন function, let, const
+  - Identifier → যেমন ভ্যারিয়েবল নাম x, total
+  - Operator → যেমন +, -, =
+  - Literal → যেমন 42, "Hello", true
+  - Punctuation → যেমন ;, {}, ()
+
+উদাহরণ:
+
+```js
+let total = 10 + 20;
+```
+
+Lexing এর পর tokens হবে নিচের মত:
+
+- let → keyword
+- total → identifier
+- = → operator
+- 10 → numeric literal
+- - → operator
+- 20 → numeric literal
+- ; → punctuation
+
+Lexing বনাম Parsing
+
+<table>
+    <tr>
+      <th>ধাপ</th>
+      <th>কাজ</th>
+      <th>উদাহরণ</th>
+    </tr>
+    <tr>
+      <td>Lexing</td>
+      <td>কোডকে টোকেনে ভাঙে</td>
+      <td>let x = 5; → ["let","x","=","5",";"]</td>
+    </tr>
+    <tr>
+      <td>Parsing</td>
+      <td>টোকেন থেকে AST (Abstract Syntax Tree) বানায়</td>
+      <td>Tree দেখায় x ভ্যারিয়েবলকে 5 assign করা হয়েছে</td>
+    </tr>
+  </table>
+
+মূল কথা
+
+- Lexing = কোডকে টোকেনে ভাঙা।
+- Parsing = টোকেন থেকে syntax tree বানানো।
+- Execution Context = সেই পরিবেশ যেখানে কোড রান হয়।
+
+👉 Lexing হলো JavaScript engine এর compilation pipeline এর প্রথম ধাপ।
+
+####Javascript Compilation Pipeline
+JavaScript কোড রান হওয়ার আগে একটি নির্দিষ্ট ধাপের মধ্য দিয়ে যায়। এই ধাপগুলোকে একসাথে বলা হয় Compilation Pipeline।
+
+১. Lexing (Tokenization)
+
+- কোডকে character by character পড়ে।
+- প্রতিটি অর্থপূর্ণ অংশকে token বানায়।
+- উদাহরণ:
+
+```js
+let x = 5 + 10;
+```
+
+Tokens → ["let","x","=","5","+","10",";"]
+
+২. Parsing
+
+- Tokens থেকে একটি Abstract Syntax Tree (AST) বানানো হয়।
+- এই Tree কোডের গঠন দেখায়।
+- উদাহরণ: x ভ্যারিয়েবলকে 5 + 10 assign করা হয়েছে।
+
+৩. Compilation
+
+- AST কে Bytecode এ রূপান্তর করা হয়।
+- Modern JS engine (যেমন V8) JIT (Just-In-Time) compilation ব্যবহার করে।
+- Performance বাড়ানোর জন্য optimization করা হয়।
+
+৪. Execution
+
+- Runtime এ Bytecode execute হয়।
+- Runtime এর অংশগুলো:
+  - Call Stack → ফাংশন কল ম্যানেজ করে।
+  - Heap Memory → অবজেক্ট ও ডেটা সংরক্ষণ করে।
+  - Event Loop → asynchronous কাজগুলো হ্যান্ডেল করে।
+
+  <img src="../../assets/js_compilation_pipeline.png" alt="Javascript Compilation Pipeline">
+
+মূল কথা: JavaScript কোড সরাসরি রান হয় না। প্রথমে Lexing → Parsing → Compilation → Execution এই চার ধাপের মধ্য দিয়ে যায়।
 
 এখন এই lexical scoping কিছু রুলস মেনে চলে। ভ্যারিয়েবল মূলত আমরা দুইভাবে লিখতে পারি। একটা হলো গ্লোবালি, আরেকটা লোকালি। এর উপর ভিত্তি করে স্কোপ প্রধানত দুই ধরণের।
 
@@ -473,39 +575,123 @@ console.log(notScoped); // Error
 
 ### Closure
 
-Closure হলো একটি মেমোরি যা আমরা একটা ফাংশন নিঃশেষ হওয়ার পরে ব্যবহার করতে পারি। যেমন sqr ফাংশন কল করার পরে আমরা p এর ভ্যালু হিসেবে 2 পাই। এটা তখনই পাবো যখন ঐ ফাংশনটা পুরোপুরি শেষ হয়ে যাবে। এটাই ক্লোজার। আরো ভালভাবে বুঝতে আপনারা [গল্পে গল্পে ক্লোজার](https://youtu.be/zSlSfqQTeFE) এই ভিডিওটি দেখতে পারেন।
+Javascript-এ আরেকটা বিশেষ scope আছে, তার নাম হলো Lexical Scope. Lexical scope বোঝার পর closure বুঝতে অনেক সহজ হয়, কারণ closure আসলে lexical scope এর উপর ভিত্তি করেই কাজ করে।
+Lexical scope হলো কোড লেখার সময় ভ্যারিয়েবল কোথায় ডিফাইন করা হয়েছে তার উপরে ভিত্তি করে scope নির্ধারণ করা।
+
+- Inner function সবসময় outer function এর ভ্যারিয়েবল অ্যাক্সেস করতে পারে।
+- Outer function inner function এর ভ্যারিয়েবল অ্যাক্সেস করতে পারে না।
+- এটি compile-time এ ঠিক হয়, runtime এ নয়।
+
+```js
+let globalVar = "আমি global";
+
+function outer() {
+  let outerVar = "আমি outer";
+
+  function inner() {
+    console.log(globalVar); // অ্যাক্সেসযোগ্য
+    console.log(outerVar); // অ্যাক্সেসযোগ্য
+  }
+
+  inner();
+}
+
+outer();
+```
+
+এখানে inner() ফাংশন outerVar এবং globalVar অ্যাক্সেস করতে পারছে কারণ lexical scope অনুযায়ী সে outer function এর ভ্যারিয়েবল দেখতে পাচ্ছে।
+
+Closure হলো এমন একটি ফাংশন যা তার outer function এর ভ্যারিয়েবলগুলোকে মনে রাখে এবং ব্যবহার করতে পারে—even যদি outer function শেষ হয়ে যায়।
+
+```js
+function outer() {
+  let counter = 0;
+
+  function inner() {
+    counter++;
+    console.log(counter);
+  }
+
+  return inner;
+}
+
+const closureFunc = outer();
+closureFunc(); // 1
+closureFunc(); // 2
+closureFunc(); // 3
+```
+
+এখানে: outer() ফাংশন শেষ হয়ে গেলেও তার ভ্যারিয়েবল counter মেমরিতে থেকে যায়। কারণ inner() ফাংশন lexical scope অনুযায়ী counter ভ্যারিয়েবল অ্যাক্সেস করতে পারে। যখন আমরা closureFunc() বারবার কল করি, তখন counter ভ্যারিয়েবল আপডেট হয়। এটিই closure — একটি inner function তার outer function এর scope ধরে রাখে।
+
+আরো ভালভাবে বুঝতে আপনারা [গল্পে গল্পে ক্লোজার](https://youtu.be/zSlSfqQTeFE) এই ভিডিওটি দেখতে পারেন।
 
 ### Execution Context
 
-আমরা একটু আগে কিছু ফাংশন বানাই।
+Execution Context হলো সেই পরিবেশ যেখানে JavaScript কোড রান হয়। এটি নির্ধারণ করে কোন ভ্যারিয়েবল, ফাংশন, এবং অবজেক্ট অ্যাক্সেসযোগ্য থাকবে এবং কীভাবে কোড এক্সিকিউট হবে।
 
-```js
-function A(a) {
-  console.log("I am A");
-}
+#### Execution Context-এর প্রকারভেদ:
 
-function B() {
-  A();
-}
+১. Global Execution Context (GEC)
 
-function C() {
-  B();
-  B();
-}
-function D() {
-  C();
-  A();
-}
+- তৈরি হয় যখন প্রোগ্রাম শুরু হয়।
+- সব global variables এবং functions এখানে থাকে।
+- পুরো প্রোগ্রামে একটাই GEC থাকে।
 
-D();
-/* 
-I am A
-I am A
-I am A
-*/
-```
+২. Function Execution Context (FEC)
 
-কোন ফাংশনের পর কোন ফাংশন কল হবে ্তা নির্ভর করে কল স্ট্যাকের উপর। স্ট্যাক একটা ডাটা স্ট্রাকচার। এর নীতি হলো `Last In First Out (LIFO)`। মানে সবার শেষে যে আসবে সে সবার আগে বের হবে। আমরা যখন প্লেট ধুয়ে একটার উপর একটা রাখি তখন প্রথম প্লেট রাখি সবার নিচে আর শেষ প্লেট রাখি সবার উপরে। যখন আমরা প্লেট নিই তখন উপর থেকেই নিই, অর্থাৎ সবার শেষে যে প্লেটটা রেখেছিলাম সেটা নিই আগে। আর প্রথমে যেটা রেখেছিলাম সবার নিচে, সেটা নিই সবার শেষে। কল স্ট্যাক এভাবে কাজ করে। এই কোডে যখন D কল করা হলো তখন সে D এর ভিতর গিয়ে কল করবে C কে। এরপর D pause হয়ে যাবে। D এর উপর C চলে যাবে। এরপর C তে যাওয়ার পর সে কল করবে B কে। এবার B চলে যাবে C এর উপর। এবার B তে গিয়ে কল হবে A। তাহলে A চলে যাবে B এর উপর। A তে গিয়ে A কল করার পর কল স্ট্যাকের উপর থেকে A চলে যাবে। এরপর যেহেতু A কল হয়ে গেছে, সেহেতু B চলে যাবে স্ট্যাক থেকে। এরপর ফিরে আসবে C তে। C তে আসার পর দেখা গেলো B ফাংশনের কাজ আছে আরেকটা। সেটাও আগের মতো শেষ হয়ে আবার ফিরে আসবে C তে। এবার C এর কাজ শেষ। C স্ট্যাক থেকে চলে যাবে। এরপর ফিরে আসবে D তে। D তে আসার পর C এর কাজ শেষ। এবার যাবে A তে। A চলে যাবে স্ট্যাকে D এর উপর। A কল হয়ে আবার D তে ফিরে আসবে। এবার D এর কাজ শেষ। এরপর ফাইনালি স্ট্যাক থেকে D চলে যাবে।
+- প্রতিবার একটি ফাংশন কল করলে নতুন context তৈরি হয়।
+- এতে local variables, arguments, এবং inner functions থাকে।
+
+৩. Eval Execution Context
+
+- eval() ফাংশনের ভিতরে কোড রান করলে তৈরি হয়।
+- খুব কম ব্যবহৃত হয়।
+
+#### Lifecycle of Execution Context
+
+১. Creation Phase
+
+- Memory allocation হয়।
+- Variable Object (VO) তৈরি হয়।
+- Scope Chain সেটআপ হয়।
+- this binding নির্ধারণ হয়।
+
+২. Execution Phase
+
+- কোড লাইন বাই লাইন রান হয়।
+- Variables actual value পায়।
+- Functions execute হয়।
+
+৩. Destruction Phase
+
+- Function শেষ হলে তার context call stack থেকে pop হয়ে যায়।
+
+এখন নিচের উদাহরণটা দেখলেই কনসেপ্ট ক্লিয়ার হয়ে যাবে:
+
+<img src="../../assets/JS_Execution_Context_bng.png" alt="JS Execution Context diagram">
+
+প্রথম অংশে ছবিতে দেখানো হয়েছে Global Execution Context (GEC)। যখন JavaScript ফাইল লোড হয়, তখনই একটি গ্লোবাল কনটেক্সট তৈরি হয়। এখানে সব global variables (var a, let b) এবং functions (foo, bar) মেমরিতে রাখা হয়। Creation phase‑এ var a কে undefined দেওয়া হয়, let b থাকে uninitialized (TDZ), আর function declarations সম্পূর্ণভাবে মেমরিতে থাকে। এরপর execution phase‑এ কোড লাইন বাই লাইন রান হয়।
+
+দ্বিতীয় অংশে দেখানো হয়েছে Function Execution Context (FEC)। যখন bar() ফাংশন কল করা হয়, তখন একটি নতুন কনটেক্সট তৈরি হয়। এর memory অংশে d ভ্যারিয়েবল allocate হয়, শুরুতে undefined থাকে। তারপর কোড অংশে foo() কল করা হয়। এর মানে হলো প্রতিটি ফাংশন কলের জন্য আলাদা execution context তৈরি হয়।
+
+তৃতীয় অংশে foo() ফাংশনের execution context দেখানো হয়েছে। এখানে memory অংশে c ভ্যারিয়েবল allocate হয় এবং কোড অংশে console.log(a + b + c) রান হয়। এই সময়ে a এবং b গ্লোবাল কনটেক্সট থেকে পাওয়া যায়, আর c লোকাল কনটেক্সট থেকে। এভাবে scope chain কাজ করে এবং ভ্যারিয়েবল resolve হয়।
+
+শেষ অংশে Call Stack দেখানো হয়েছে। প্রথমে GEC থাকে stack‑এ। যখন bar() কল হয়, তার FEC stack‑এ push হয়। এরপর foo() কল হলে তার FEC stack‑এ push হয়। কাজ শেষ হলে foo() pop হয়, তারপর bar() pop হয়, এবং সবশেষে GEC pop হয়। ছবির নিচে ধাপে ধাপে ব্যাখ্যা করা হয়েছে—ফাইল লোড, গ্লোবাল কনটেক্সট তৈরি, ফাংশন কল হলে নতুন কনটেক্সট তৈরি, কাজ শেষে pop হওয়া, এবং সবশেষে গ্লোবাল কনটেক্সটও মুছে যাওয়া।
+
+#### JavaScript Engine-এর সম্পূর্ণ কাজের ধাপ (সংক্ষেপে)
+
+১. Script Load – JavaScript Engine স্ক্রিপ্ট লোড করে।
+২. Global Execution Context (GEC) তৈরি – Call Stack-এ GEC Push হয়।
+৩. Creation Phase (Hoisting) – Variables ও Functions-এর জন্য Memory Allocate হয়; var → undefined, let/const → uninitialized, Function Declaration → সম্পূর্ণ Function Object।
+৪. Execution Phase – কোড লাইন ধরে Execute হয় এবং Variables-এ Value Assign হয়।
+৫. Function Call – প্রতিটি Function Call-এর জন্য নতুন Function Execution Context (FEC) তৈরি হয়ে Call Stack-এর উপরে Push হয়।
+৬. Nested Function Call – এক Function-এর ভেতর থেকে আরেকটি Function Call হলে নতুন FEC তৈরি হয় এবং Stack আরও বড় হয়।
+৭. Scope Resolution – Variable খোঁজার সময় প্রথমে Local Scope, তারপর Parent Scope, শেষে Global Scope অনুসন্ধান করা হয় (Scope Chain)।
+৮. Function Return – Function শেষ হলে তার Execution Context Call Stack থেকে Pop হয় এবং Local Memory Garbage Collection-এর জন্য প্রস্তুত হয়।
+৯. Global Code শেষ – GEC-ও Call Stack থেকে Pop হয়।
+১০. Call Stack Empty – JavaScript Engine-এর বর্তমান synchronous execution সম্পূর্ণ হয়; এরপর Event Loop থাকলে asynchronous কাজগুলো পর্যায়ক্রমে Process হয়।
+
+এই ধারাবাহিকতাই JavaScript Execution Context-এর মৌলিক জীবনচক্র।
 
 লেখাটা পড়ে হয়তো মাথা চক্কর দিতে পারে। ভালভাবে বোঝার জন্য ভিডিওর [2:00:33](https://youtu.be/wMy2IZ12mxM?t=7233) থেকে [2:24:39](https://youtu.be/wMy2IZ12mxM?t=8679) পর্যন্ত দেখুন।
 
@@ -541,9 +727,9 @@ var t = function () {
 
 কলব্যাক ফাংশন বলতে বুঝায় আমরা একটা ফাংশনের আর্গুমেন্ট আকারে আরেকটা ফাংশন পাশ করবো। যে ফাংশনকে আর্গুমেন্ট আকারে পাস করা হচ্ছে সেটাই কলব্যাক ফাংশন। উপরে generateTwoNumbers() এর উদাহরণে কলব্যাক ফাংশন দেখানো হয়েছে।
 
-## IIFE (Immediate Invoke Function Expression)
+## IIFE (Immediate Invoking Function Expression)
 
-আমরা যদি কোনো ফাংশন লিখা মাত্র কল করি সেটাকে বলছি Immediate Invoke Function Expression (IIFE)। যেমনঃ
+আমরা যদি কোনো ফাংশন লিখা মাত্র কল করি সেটাকে বলছি Immediate Invoking Function Expression (IIFE)। যেমনঃ
 
 ```js
 (function (name) {
@@ -567,4 +753,5 @@ var t = function () {
 
 ## AUTHOR
 
-[Aditya Chakraborty](https://github.com/adityackr)
+1. [Aditya Chakraborty](https://github.com/adityackr)
+2. [Md. A. Rahim](https://github.com/marahim05078)
